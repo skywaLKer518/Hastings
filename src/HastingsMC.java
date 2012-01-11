@@ -119,7 +119,7 @@ public class HastingsMC extends MarkovChain{
 		for (int i = 0; i < n; i ++){
 			fac = 1;
 			for (int j = 1; j < i; j++){
-				fac = fac * (j+1);                // pay attention, here overflow
+				fac = fac * (j+1);                // pay attention, here overflows
 			}
 //			System.out.println(i+"th fac =  "+ fac);
 			pie[i] = Math.pow(lamda, i) * Math.pow(Math.E, -lamda) / fac;
