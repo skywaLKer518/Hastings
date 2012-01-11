@@ -26,20 +26,40 @@ public class HastingsMC extends MarkovChain{
 		initMatrix(s,stateN);
 		alpha = init1(stateN);
 		initMatrix(alpha,stateN);
-		
-		// TODO Auto-generated constructor stub
 	}
 	
-	// construc transition matrix P for the Hastings Markov Chain
+	/*
+	 * in Hastings' method, p only relies on the ratio of pie_i / pie_j
+	 * so, we construct s and alpha together without particular pie
+	 */
 	public void initial(){
+		qConstruction2();
+		sAlphaConstruct();
+		pConstruction();
+	}
+	/*
+	 *  construc transition matrix P for the Hastings Markov Chain
+	 *  but actually pie should not be constructed
+	 */
+	public void initial2(){
 		pieConstruction();
 		qConstruction2();
 		sConstructionM();
 		alphaConstruction();
 		pConstruction();
+		// print the p matrix
+//		for (int i = 0; i < stateNumber; i ++){
+//			System.out.println(p[19][i]);
+//		}
 	}
 	
-	public void Sample(int start, int times){
+	/*
+	 * Example 1 : sample from poisson distribution
+	 * a discrete sample
+	 * fix number of states
+	 * the key is to construct the transition matrix
+	 */
+	public void Sample1(int start, int times){
 		Log log = new Log("log.txt");
 		int r[] = new int[stateNumber];
 		int s = start;
@@ -64,8 +84,10 @@ public class HastingsMC extends MarkovChain{
 		log.close();
 	}
 	
-	// directly sample from pie
-	public void Sample2(int times){
+	/*
+	 *  directly sample from pie
+	 */
+	public void Sample0(int times){
 		int a = 0;
 		int r[] = new int[stateNumber];
 		for (int i = 0; i < times; i++){
@@ -79,7 +101,7 @@ public class HastingsMC extends MarkovChain{
 	}
 	
 	/*
-	 *  example 2 : normal distribution
+	 *  Example 2 : normal distribution
 	 *  first x
 	 *  then get [ex - delta, ex + delta]
 	 *  sample y from it
@@ -89,7 +111,7 @@ public class HastingsMC extends MarkovChain{
 	 *  else x -> x
 	 */
 	
-	public void Sample3(int times){
+	public void Sample2(int times){
 		Log log = new Log("log.txt");
 		int record[] = new int[100];
 		double x = 0;
@@ -127,6 +149,13 @@ public class HastingsMC extends MarkovChain{
 		log.close();
 	}
 	
+	/*
+	 * Example 3 : multidimensional 
+	 * 
+	 */
+	public void Sampe3(){
+		// TODO
+	}
 	/*
 	 * step 1
 	 * assume that X(t) = i and select j using the distribution given by the ith row of Q
@@ -176,6 +205,40 @@ public class HastingsMC extends MarkovChain{
 //			System.out.println(i+"th fac =  "+ fac);
 			pie[i] = Math.pow(lamda, i) * Math.pow(Math.E, -lamda) / fac;
 //			System.out.println(pie[i]);
+		}
+		return;
+	}
+	
+	/*
+	 * construct s and alpha
+	 * example 1 : Poisson Distribution
+	 * pie_i+1 / pie_i = lamda / (i + 1), thus (q_ij the same)alpha_ij = 1 (if A<1) or 1/A (else), where A = pie_i / pie_j
+	 */
+	public void sAlphaConstruct(){
+		int n = stateNumber;
+		double lamda = 4;
+		double ratio = 1;
+		for (int i = 0; i < n; i++){
+			for (int j = 0; j < n; j ++){
+				if (i == j) ratio = 1;
+				else {
+					ratio = 1;
+					int a = Math.max(i, j);
+					int b = Math.min(i, j); 
+					for (int k = 0; k < a - b; k++){
+						ratio = ratio * lamda; 
+					}
+					for (int k = a; k >= b+1; k--){
+						ratio = ratio / (k * 1.0);
+					}
+					if (i > j)	;
+					else	ratio = 1 / ratio;
+				}
+				if (ratio<1)
+					alpha[i][j] = 1;
+				else
+					alpha[i][j] = 1 / ratio;
+			}
 		}
 		return;
 	}

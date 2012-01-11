@@ -6,15 +6,13 @@ public class Main{
 		
 		HastingsMC HMC = new HastingsMC(20);
 //		HMC.qConstruction3();
-//		System.out.println(HMC.step1(5));
-//		System.out.println(HMC.step1(2));
-//		System.out.println(HMC.step1(1));
 		
+//		HMC.initial2();
 		HMC.initial();
 		
-//		HMC.Sample(0, 2000);
-//		HMC.Sample2(200000);
-		HMC.Sample3(300000);
+		HMC.Sample1(0, 200000);
+//		HMC.Sample0(200000);
+//		HMC.Sample2(300000);
 		
 		
 		
