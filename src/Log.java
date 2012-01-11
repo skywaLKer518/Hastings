@@ -50,6 +50,14 @@ public class Log{
 			e.printStackTrace();
 		}
 	}
+	void outln(double s){
+		try {
+			bout.write(String.valueOf(s));
+			bout.newLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	void outln(int s){
 		try {
 			bout.write(String.valueOf(s));

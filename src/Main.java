@@ -12,8 +12,9 @@ public class Main{
 		
 		HMC.initial();
 		
-		HMC.Sample(0, 2000);
+//		HMC.Sample(0, 2000);
 //		HMC.Sample2(200000);
+		HMC.Sample3(300000);
 		
 		
 		

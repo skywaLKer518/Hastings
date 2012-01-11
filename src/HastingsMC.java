@@ -64,6 +64,7 @@ public class HastingsMC extends MarkovChain{
 		log.close();
 	}
 	
+	// directly sample from pie
 	public void Sample2(int times){
 		int a = 0;
 		int r[] = new int[stateNumber];
@@ -76,6 +77,56 @@ public class HastingsMC extends MarkovChain{
 			System.out.println(r[i]);
 		}
 	}
+	
+	/*
+	 *  example 2 : normal distribution
+	 *  first x
+	 *  then get [ex - delta, ex + delta]
+	 *  sample y from it
+	 *  x - > y 
+	 *  if ( x^2 - y^2 ) > 0 x -> y
+	 *  else if beta  x -> y
+	 *  else x -> x
+	 */
+	
+	public void Sample3(int times){
+		Log log = new Log("log.txt");
+		int record[] = new int[100];
+		double x = 0;
+		double y = 0;
+		double e1 = 1;
+		double e2 = -1;
+		double delta = 1;
+		double r1 = 0,r2 = 0;
+		double m;
+		double l;
+		int zhengshu;
+		for (int i = 0; i < times; i ++){
+			r1 = Math.random();
+			r2 = Math.random();
+			y = 2 * delta * r1 + e1 * x - delta;
+			m = x * x - y * y;
+			if (m >= 0){
+				x = y;
+			}
+			else {
+				l = Math.pow(Math.E, 0.5 * m);
+				if (r2 < l){
+					x = y;
+				}
+				else;
+			}
+			zhengshu = (int)Math.floor(x * 10) + 50;
+			record[zhengshu]++;
+//			System.out.println(x);
+			log.outln(x);
+		}
+		for (int i = 0; i < 100; i++){
+			System.out.println(record[i]);
+		}
+		log.close();
+	}
+	
 	/*
 	 * step 1
 	 * assume that X(t) = i and select j using the distribution given by the ith row of Q
@@ -112,6 +163,7 @@ public class HastingsMC extends MarkovChain{
 //		}
 		/*
 		 * setting 2 Poisson distribution Pie_i = lamda^i * e^-lamda / i!
+		 * Example 1 P101
 		 */
 //		double lamda = 10.0;
 		double lamda = 4.0;
@@ -123,9 +175,8 @@ public class HastingsMC extends MarkovChain{
 			}
 //			System.out.println(i+"th fac =  "+ fac);
 			pie[i] = Math.pow(lamda, i) * Math.pow(Math.E, -lamda) / fac;
-			System.out.println(pie[i]);
+//			System.out.println(pie[i]);
 		}
-		
 		return;
 	}
 	/*
