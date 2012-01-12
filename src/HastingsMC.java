@@ -29,17 +29,18 @@ public class HastingsMC extends MarkovChain{
 	}
 	
 	/*
-	 * in Hastings' method, p only relies on the ratio of pie_i / pie_j
+	 * Use Hastings' method, p only relies on the ratio of pie_i / pie_j
 	 * so, we construct s and alpha together without particular pie
 	 */
 	public void initial(){
-		qConstruction2();
-		sAlphaConstruct();
-		pConstruction();
+		//qConstruction2();  // all q_ij equal to each other
+		qConstruction1();  // q_i(i+1) = q_i(i-1) = 0.5
+		sAlphaConstruct(); // this is based on example 1
+		pConstruction();   
 	}
 	/*
 	 *  construc transition matrix P for the Hastings Markov Chain
-	 *  but actually pie should not be constructed
+	 *  but actually pie should not be "known"
 	 */
 	public void initial2(){
 		pieConstruction();
@@ -47,10 +48,6 @@ public class HastingsMC extends MarkovChain{
 		sConstructionM();
 		alphaConstruction();
 		pConstruction();
-		// print the p matrix
-//		for (int i = 0; i < stateNumber; i ++){
-//			System.out.println(p[19][i]);
-//		}
 	}
 	
 	/*
@@ -66,9 +63,7 @@ public class HastingsMC extends MarkovChain{
 		int d = -1; 
 		for (int i = 0; i < times; i ++){
 			d = go(s);
-//			System.out.println("The "+i+"th result = " +d);
 			r[d] ++;
-//			log.outln(d);
 			s = d;
 		}
 		for (int i = 0; i < stateNumber; i++){
@@ -153,7 +148,7 @@ public class HastingsMC extends MarkovChain{
 	 * Example 3 : multidimensional 
 	 * 
 	 */
-	public void Sampe3(){
+	public void Sample3(){
 		// TODO
 	}
 	/*
@@ -265,7 +260,16 @@ public class HastingsMC extends MarkovChain{
 		}
 		return;
 	}	
-	public void qConstruction(){
+	public void qConstruction1(){
+		q[0][0] = 0.5; q[0][1] = 0.5;
+		for (int i = 1; i < stateNumber; i ++){
+			q[i][i-1] = 0.5;
+			if (i+1 >= stateNumber) {
+				q[i][i] = 0.5;
+				break;
+			}
+			q[i][i+1] = 0.5;
+		}
 		return;
 	}
 	// uniformly
