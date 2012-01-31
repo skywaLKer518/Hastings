@@ -3,8 +3,8 @@ public class MarkovChain{
 	
 	protected boolean timeIndependent = true;
 	protected int stateNumber;
-	protected double[][] p;//transitionMatrix
-	protected double[] pie; // probability distribution of each state
+	protected double[][] p;  	    	// transitionMatrix
+	protected double[] pie;   			// probability distribution of each state
 	
 	
 	
